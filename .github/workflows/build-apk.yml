@@ -1,0 +1,55 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Giải nén project (nếu bạn upload dạng LichTrucWidget.zip ở gốc repo)
+        run: |
+          if [ -f "LichTrucWidget.zip" ]; then
+            unzip -o LichTrucWidget.zip -d .
+          fi
+
+      - name: Copy google-services.json vào đúng vị trí (nếu bạn upload riêng ở gốc repo)
+        run: |
+          if [ -f "google-services.json" ] && [ -d "LichTrucWidget/app" ]; then
+            cp google-services.json LichTrucWidget/app/google-services.json
+          fi
+
+      - name: Xác định thư mục project (có thể là gốc repo hoặc thư mục LichTrucWidget)
+        id: proj
+        run: |
+          if [ -f "LichTrucWidget/settings.gradle" ]; then
+            echo "dir=LichTrucWidget" >> "$GITHUB_OUTPUT"
+          else
+            echo "dir=." >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.4'
+
+      - name: Build debug APK
+        working-directory: ${{ steps.proj.outputs.dir }}
+        run: gradle assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug-apk
+          path: ${{ steps.proj.outputs.dir }}/app/build/outputs/apk/debug/app-debug.apk
