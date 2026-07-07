@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "377094775325",
+    "project_id": "lichtruckho",
+    "storage_bucket": "lichtruckho.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:377094775325:android:d733f4a9602a92c5845cf4",
+        "android_client_info": {
+          "package_name": "com.khotruc.dutywidget"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZ6hfc1LWQSbuaV0kAKkZSCMzFzOOYMjU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
